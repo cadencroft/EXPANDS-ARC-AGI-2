@@ -6,7 +6,7 @@ tasks = A_promptFormatter.loadJSONFile("--arc-agi_training_challenges.json")
 # print(taskID, taskData)
 
 startTaskNumber = 0
-endTaskNumber = 0
+endTaskNumber = 3
 
 
 for i in range(startTaskNumber, endTaskNumber+1):
@@ -18,6 +18,8 @@ for i in range(startTaskNumber, endTaskNumber+1):
     taskID, taskData = A_promptFormatter.loadTask(i, tasks)
 
     prompt = A_promptFormatter.buildPrompt(taskData)
+
+    # prompt = "Tell me what 2 + 7 is"
 
     print(prompt)
 
