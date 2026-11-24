@@ -6,7 +6,7 @@ tasks = A_promptFormatter.loadJSONFile("--arc-agi_training_challenges.json")
 # print(taskID, taskData)
 
 startTaskNumber = 0
-endTaskNumber = 3
+endTaskNumber = 1
 
 
 for i in range(startTaskNumber, endTaskNumber+1):

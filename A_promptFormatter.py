@@ -15,38 +15,47 @@ def loadTask(index, tasks):
 
 def buildPrompt(taskData):
 
-    prompt = ("You are an AI agent with the goal of solving Abstraction and Reasoning Corpus for Artificial General Intelligence (ARC-AGI) puzzles.\n\n"
-    "You will be provided with examples. Each example will have an input puzzle and an output puzzle. The output puzzle is found by applying "
-    "some transformation onto the input problem. You will also be provided a test which only contains the input. You will NOT be provided the test output.\n\n"
-    "Your job is to discover the pattern from the examples and apply it to the test input to produce the correct test output. " \
-    "Each puzzle is in the form of a 2D matrix. The matrix contains the digits 0-9 which all represent colors. The colors are as followed: " 
-    "0 is Black, 1 is Blue, 2 is Red, 3 is Green, 4 is Yellow, 5 is Gray, 6 is Magenta, 7 is Orange, 8 is Cyan, 9 is Maroon. " 
-    "You must return your guess for the test output with only the digits 0-9 in a matrix. You must return the same grid in 2 different formats. For the first one, do not include any brackets, commas, or other symbols, and make sure your output is nicely spaced and formatted. For the second one, format it as a 2D array.\n\n"
-    "The provided data is shown below. Use only the provided data while making your test output.\n\n" 
+    prompt = (
+        "Solve the ARC-AGI puzzle by identifying the transformation "
+        "in the training examples and applying it to the test input.\n\n"
+
+        "Each puzzle is a 2D grid of digits representing colors:\n"
+        "0=Black, 1=Blue, 2=Red, 3=Green, 4=Yellow, "
+        "5=Gray, 6=Magenta, 7=Orange, 8=Cyan, 9=Maroon.\n\n"
+
+        "Use only the provided examples.\n\n"
+
+        "IMPORTANT OUTPUT FORMAT:\n"
+        "Return ONLY a valid Python 2D list of integers.\n"
+        "The outer list must contain a separate list for EVERY row.\n"
+        "Each row must have its own square brackets.\n"
+        "Separate every integer with a comma.\n"
+        "Separate every row with a comma.\n"
+        "Do not flatten the grid into a single list.\n"
+        "Do not include explanations or Markdown.\n\n"
+
+        "Example of the REQUIRED format:\n"
+        "[[1, 2, 3],\n"
+        " [4, 5, 6],\n"
+        " [7, 8, 9]]\n\n"
+
+        "Training examples:\n\n"
     )
 
-    trainExamples = taskData["train"]               # This contains an array of each training example.
+    trainExamples = taskData["train"]
 
     for exNum in range(len(trainExamples)):
 
-        exInput  = trainExamples[exNum]["input"]    # This contains the input of the example
-        exOutput = trainExamples[exNum]["output"]   # This contains the output of the example
+        exInput = trainExamples[exNum]["input"]
+        exOutput = trainExamples[exNum]["output"]
 
-        prompt += f"--Example {exNum}--\n\n"
+        prompt += f"Example {exNum}:\n"
+        prompt += "Input:\n" + formatGrid(exInput) + "\n"
+        prompt += "Output:\n" + formatGrid(exOutput) + "\n\n"
 
-        prompt += "Input:\n\n"
-        prompt += formatGrid(exInput) + "\n"
+    testInput = taskData["test"][0]["input"]
 
-        prompt += "Output:\n\n"
-        prompt += formatGrid(exOutput) + "\n\n\n\n"
-
-
-    testInput = taskData["test"][0]["input"]        # This contains the input of the test
-
-    prompt += "--Test--\n\n"
-
-    prompt += "Input:\n\n"
-    prompt += formatGrid(testInput)
+    prompt += "Test Input:\n" + formatGrid(testInput)
 
     return prompt
 
